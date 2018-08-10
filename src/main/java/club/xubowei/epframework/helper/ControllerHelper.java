@@ -28,8 +28,10 @@ public class ControllerHelper {
                 if (ArrayUtils.isNotEmpty(controllerClassMethods)) {
                     for (Method controllerClassMethod : controllerClassMethods) {
                         if (controllerClassMethod.isAnnotationPresent(Action.class)) {
-                            String path = controllerClassMethod.getAnnotation(Action.class).value();
-                            Request request = new Request(controllerClassMethod.getName(), path);
+                            Action methodAnnotation = controllerClassMethod.getAnnotation(Action.class);
+                            String method = methodAnnotation.method();
+                            String path = methodAnnotation.value();
+                            Request request = new Request(method, path);
                             Handler handler = new Handler(controllerClass, controllerClassMethod);
                             ACTION_MAP.put(request, handler);
                         }
@@ -37,5 +39,10 @@ public class ControllerHelper {
                 }
             }
         }
+    }
+
+    public static Handler getHandler(String requestMethod, String requestPath) {
+        Request request = new Request(requestMethod, requestPath);
+        return ACTION_MAP.get(request);
     }
 }
