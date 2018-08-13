@@ -98,7 +98,7 @@ public final class ClassUtil {
             } else {
                 String subPackagePath = fileName;
                 if (StringUtils.isNotBlank(packagePath)) {
-                    subPackagePath = packagePath + "." + subPackagePath;
+                    subPackagePath = packagePath + "/" + subPackagePath;
                 }
                 String subPackageName = fileName;
                 if (StringUtils.isNotBlank(packageName)) {

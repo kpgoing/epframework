@@ -1,5 +1,6 @@
 package club.xubowei.epframework.util;
 
+import club.xubowei.epframework.bean.Param;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,6 +41,11 @@ public final class ReflectionUtil {
         }
 
         return result;
+    }
+
+    public static Object invokeMethod(Object object, Method method, Param param) {
+        Object[] paramArrays = param.getParamMap().values().toArray();
+        return invokeMethod(object, method, paramArrays);
     }
 
     public static void setField(Object object, Field field, Object value) {
