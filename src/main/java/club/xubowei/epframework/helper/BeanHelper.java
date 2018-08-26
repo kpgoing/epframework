@@ -22,7 +22,7 @@ public class BeanHelper {
         }
     }
 
-    public static Map<Class<?>, Object> getBeanMap() {
+    static Map<Class<?>, Object> getBeanMap() {
         return BEAN_MAP;
     }
 
@@ -34,6 +34,7 @@ public class BeanHelper {
         return (T) BEAN_MAP.get(cls);
     }
 
-
-
+    static void setBean(Class<?> cls, Object object) {
+        BEAN_MAP.put(cls, object);
+    }
 }

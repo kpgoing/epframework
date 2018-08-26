@@ -4,6 +4,7 @@ import club.xubowei.epframework.bean.Data;
 import club.xubowei.epframework.bean.Handler;
 import club.xubowei.epframework.bean.Param;
 import club.xubowei.epframework.bean.View;
+import club.xubowei.epframework.constant.WebConstant;
 import club.xubowei.epframework.helper.BeanHelper;
 import club.xubowei.epframework.helper.ConfigHelper;
 import club.xubowei.epframework.helper.ControllerHelper;
@@ -31,8 +32,11 @@ import java.util.Map;
  */
 @WebServlet(urlPatterns = "/*", loadOnStartup = 0)
 public class DispatcherServlet extends HttpServlet {
+
+    private static final long serialVersionUID = -1284145289966701776L;
+
     @Override
-    public void init(ServletConfig config) throws ServletException {
+    public void init(ServletConfig config) {
         HelperLoader.init();
 
         ServletContext servletContext = config.getServletContext();
@@ -57,7 +61,7 @@ public class DispatcherServlet extends HttpServlet {
             Object controllerBean = BeanHelper.getBean(controllerClass);
 
             Map<String, String[]> parameterMap = request.getParameterMap();
-            Map<String, Object> params = new HashMap<>();
+            Map<String, Object> params = new HashMap<>(parameterMap.size());
             parameterMap.forEach((key, value) -> params.put(key, value[0]));
             Param param = new Param(params);
 
@@ -68,7 +72,7 @@ public class DispatcherServlet extends HttpServlet {
                 View view = (View) result;
                 String path = view.getPath();
                 if (StringUtils.isNotBlank(path)) {
-                    if (path.startsWith("/")) {
+                    if (path.startsWith(WebConstant.URL_SPILT_SEPARATOR)) {
                         response.sendRedirect(request.getContextPath() + path);
                     } else {
                         Map<String, Object> model = view.getModel();
@@ -80,8 +84,8 @@ public class DispatcherServlet extends HttpServlet {
                 Data data = (Data) result;
                 Object model = data.getModel();
                 if (model != null) {
-                    response.setContentType("application/json");
-                    response.setCharacterEncoding("UTF-8");
+                    response.setContentType(WebConstant.ContentType.APPLICATION_JSON);
+                    response.setCharacterEncoding(WebConstant.EncodingType.UTF_8);
                     PrintWriter writer = response.getWriter();
                     String json = JsonUtil.toJson(model);
                     writer.write(json);
